@@ -9,10 +9,7 @@ void	free_stack(t_stack **stack)
 void 	free_double_array(char **split, int i)
 {
 	while (i >= 0)
-	{
-		free(split[i]);
-		i--; // todo лишняя строка можно объяденить с 13 строкой
-	}
+		free(split[i--]);
 	free(split);
 }
 
@@ -22,9 +19,6 @@ void 	free_full_double_array(char **split)
 
 	i = 0;
 	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
+		free(split[i++]);
 	free(split);
 }
