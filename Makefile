@@ -21,7 +21,8 @@ BONUS_SRCS_LIST = checker.c check_pushes.c\
 BONUS_SRCS_DIR = checker_srcs/
 BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(BONUS_SRCS_LIST))
 
-BONUS_INCLUDES = -Iincludes/push_swap.h -Iincludes/get_next_line.h -Iincludes/libft.h
+BONUS_INCLUDES = -Iincludes
+#BONUS_INCLUDES = -Iincludes/push_swap.h -Iincludes/get_next_line.h -Iincludes/libft.h
 BONUS_HEADER = includes/push_swap.h includes/get_next_line.h includes/libft.h
 BONUS_OBJ_DIR = bonus_obj/
 BONUS_OBJ_LIST = $(patsubst %.c, %.o, $(BONUS_SRCS_LIST))
@@ -66,7 +67,8 @@ SOURCE = libft/ft_atoi.c \
 HEADER = includes/push_swap.h
 HEADER_LIB = includes/libft.h
 
-INCLUDES = -I$(HEADER) -I$(HEADER_LIB)
+INCLUDES = -Iincludes
+#INCLUDES = -I$(HEADER) -I$(HEADER_LIB)
 
 NAME = push_swap
 
@@ -113,12 +115,11 @@ $(BONUS_OBJ_DIR)%.o: $(BONUS_SRCS_DIR)%.c includes/push_swap.h includes/libft.h 
 
 
 clean:
-		@echo "$(NAME):$(GREEN) libft is cleaned$(RESET)"
-		@echo "$(NAME):$(GREEN) objects dirs are cleaned$(RESET)"
 		@rm -rf objects
+		@rm -rf bonus_obj
+		@make -C libft clean
 		@echo "$(BONUS):$(GREEN) libft is cleaned$(RESET)"
 		@echo "$(BONUS):$(GREEN) objects dirs are cleaned$(RESET)"
-		@rm -rf bonus_obj
 
 fclean: clean
 		@$(RM) $(NAME)
