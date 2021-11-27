@@ -22,8 +22,6 @@ BONUS_SRCS_DIR = checker_srcs/
 BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(BONUS_SRCS_LIST))
 
 BONUS_INCLUDES = -Iincludes
-#BONUS_INCLUDES = -Iincludes/push_swap.h -Iincludes/get_next_line.h -Iincludes/libft.h
-BONUS_HEADER = includes/push_swap.h includes/get_next_line.h includes/libft.h
 BONUS_OBJ_DIR = bonus_obj/
 BONUS_OBJ_LIST = $(patsubst %.c, %.o, $(BONUS_SRCS_LIST))
 BONUS_OBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_OBJ_LIST))
@@ -68,7 +66,6 @@ HEADER = includes/push_swap.h
 HEADER_LIB = includes/libft.h
 
 INCLUDES = -Iincludes
-#INCLUDES = -I$(HEADER) -I$(HEADER_LIB)
 
 NAME = push_swap
 
@@ -99,6 +96,11 @@ $(OBJ_DIR):
 $(OBJ_DIR)%.o: $(SRCS_DIR)%.c $(HEADER) $(HEADER_LIB)
 		@gcc $(CFLAGS) -c $(INCLUDES) $< -o $@
 		@echo "$(GREEN)/$(RESET)\c"
+
+#$(BONUS): $(BONUS_OBJ_DIR) $(BONUS_OBJ) $(LIBFT)
+		@#gcc $(CFLAGS) $(BONUS_INCLUDES) $(BONUS_OBJ) $(LIBFT) -o checker
+		@#echo "$(BONUS):$(GREEN).o files were created$(RESET)"
+		@#echo "$(BONUS): $(GREEN)$(BONUS) was created$(RESET)"
 
 $(BONUS): $(BONUS_OBJ_DIR) $(BONUS_OBJ) $(LIBFT)
 		@gcc $(CFLAGS) $(BONUS_INCLUDES) $(BONUS_OBJ) $(LIBFT) -o $(BONUS)

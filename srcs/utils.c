@@ -28,10 +28,9 @@ int	len_stack(t_stack *stack)
 {
 	int	len;
 
-	len = 0;
 	if (!stack)
 		return (0);
-	len++; //todo строки 51 и 54 можно объединить и просто len = 1 (лишняя операция)
+	len = 1;
 	stack = stack->next;
 	while (stack->head == 0)
 	{
@@ -60,3 +59,11 @@ char	*str_prolongate_fabrik(char *arr, char *add)
 	free(tmp);
 	return (arr);
 }
+
+void	ft_putstr(char *s)
+{
+	if (s)
+		while (*s)
+			write(1, s++, 1);
+}
+

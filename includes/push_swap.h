@@ -1,9 +1,12 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
+
 # include <unistd.h>
 # include <stdlib.h>
-# include "../includes/libft.h"
-# include "../includes/get_next_line.h"
+
+# include "libft.h"
+# include "get_next_line.h"
+
 typedef struct s_linked
 {
 	int					number;
@@ -18,6 +21,7 @@ typedef struct s_medians
 	int					num;
 	int					step;
 }	t_medians;
+
 int			ft_custom_strcmp(char *s1, char *s2);
 int			*casher(char **set, int *save);
 int			my_exit(int err_num);
@@ -75,4 +79,7 @@ char		*str_prolongate_fabrik(char *arr, char *add);
 int			find_next(t_stack *stack_B, t_medians *chunks);
 int			find_next_min(t_stack *stack_B, int min);
 void		small_sort(t_stack **stack_A, t_stack **stack_B);
+
+void	ft_putstr(char *s);
+
 #endif
