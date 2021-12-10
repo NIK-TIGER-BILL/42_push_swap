@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	sorted_stack(t_stack *stack)
@@ -21,7 +33,7 @@ void	push_chunks(t_stack **stack_A, t_stack **stack_B, t_medians *chunks)
 		if ((*stack_A)->order <= chunks->num)
 		{
 			push_b(stack_A, stack_B);
-			shift_B(stack_B);
+			shift_b(stack_B);
 			chunks->num++;
 		}
 		else if ((*stack_A)->order <= chunks->num + chunks->step)
@@ -30,7 +42,7 @@ void	push_chunks(t_stack **stack_A, t_stack **stack_B, t_medians *chunks)
 			chunks->num++;
 		}
 		else
-			shift_A(stack_A);
+			shift_a(stack_A);
 	}
 }
 
@@ -66,9 +78,9 @@ void	sorting_back(t_stack **stack_A, t_stack **stack_B, t_medians *chunks)
 			chunks->num--;
 		}
 		else if (find_next(*stack_B, chunks))
-			shift_B(stack_B);
+			shift_b(stack_B);
 		else
-			reverse_shift_B(stack_B);
+			reverse_shift_b(stack_B);
 	}
 }
 

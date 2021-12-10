@@ -17,11 +17,12 @@ BONUS_SRCS_LIST = checker.c check_pushes.c\
 			check_reverse_rotate.c check_rotate.c check_swaps.c\
 			get_next_line.c get_next_line_utils.c\
 			stack.c utils.c rounded_list_routine.c\
-			check_args.c free_memory.c
+			check_args.c free_memory.c validator.c
 BONUS_SRCS_DIR = checker_srcs/
 BONUS_SRCS = $(addprefix $(BONUS_SRCS_DIR), $(BONUS_SRCS_LIST))
 
-BONUS_INCLUDES = -Iincludes
+BONUS_INCLUDES = -Iincludes/push_swap.h -Iincludes/get_next_line.h -Iincludes/libft.h
+BONUS_HEADER = includes/push_swap.h includes/get_next_line.h libft/libft.h
 BONUS_OBJ_DIR = bonus_obj/
 BONUS_OBJ_LIST = $(patsubst %.c, %.o, $(BONUS_SRCS_LIST))
 BONUS_OBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_OBJ_LIST))
@@ -63,16 +64,14 @@ SOURCE = libft/ft_atoi.c \
 		 libft/ft_tolower.c \
 		 libft/ft_toupper.c libft/libft.h
 HEADER = includes/push_swap.h
-HEADER_LIB = includes/libft.h
+HEADER_LIB = libft/libft.h
 
-INCLUDES = -Iincludes
+INCLUDES = -I$(HEADER) -I$(HEADER_LIB)
 
 NAME = push_swap
 
-CFLAGS =
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
-
-# COLORS
 
 GREEN = \033[0;32m
 RED = \033[0;31m
@@ -81,7 +80,7 @@ RESET = \033[0m
 all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ) $(LIBFT)
-		@gcc $(CFLAGS) $(INCLUDES) $(OBJ) $(LIBFT) -o $(NAME)
+		@gcc $(CFLAGS) $(LIBFT) $(INCLUDES) $(OBJ) -o $(NAME)
 		@echo "$(NAME):$(GREEN).o files were created$(RESET)"
 		@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 
@@ -97,13 +96,8 @@ $(OBJ_DIR)%.o: $(SRCS_DIR)%.c $(HEADER) $(HEADER_LIB)
 		@gcc $(CFLAGS) -c $(INCLUDES) $< -o $@
 		@echo "$(GREEN)/$(RESET)\c"
 
-#$(BONUS): $(BONUS_OBJ_DIR) $(BONUS_OBJ) $(LIBFT)
-		@#gcc $(CFLAGS) $(BONUS_INCLUDES) $(BONUS_OBJ) $(LIBFT) -o checker
-		@#echo "$(BONUS):$(GREEN).o files were created$(RESET)"
-		@#echo "$(BONUS): $(GREEN)$(BONUS) was created$(RESET)"
-
 $(BONUS): $(BONUS_OBJ_DIR) $(BONUS_OBJ) $(LIBFT)
-		@gcc $(CFLAGS) $(BONUS_INCLUDES) $(BONUS_OBJ) $(LIBFT) -o $(BONUS)
+		@gcc $(CFLAGS) $(LIBFT) $(BONUS_INCLUDES) $(BONUS_OBJ) -o checker
 		@echo "$(BONUS):$(GREEN).o files were created$(RESET)"
 		@echo "$(BONUS): $(GREEN)$(BONUS) was created$(RESET)"
 
@@ -111,21 +105,21 @@ $(BONUS_OBJ_DIR):
 		@mkdir -p $(BONUS_OBJ_DIR)
 		@echo "$(NAME): $(GREEN)$(BONUS_OBJ_DIR) was created$(RESET)"
 
-$(BONUS_OBJ_DIR)%.o: $(BONUS_SRCS_DIR)%.c includes/push_swap.h includes/libft.h includes/get_next_line.h
+$(BONUS_OBJ_DIR)%.o: $(BONUS_SRCS_DIR)%.c $(BONUS_HEADER)
 		@gcc $(CFLAGS) -c $(BONUS_INCLUDES) $< -o $@
 		@echo "$(GREEN)/$(RESET)\c"
 
 
 clean:
+		@make -C libft clean
 		@rm -rf objects
 		@rm -rf bonus_obj
-		@make -C libft clean
 		@echo "$(BONUS):$(GREEN) libft is cleaned$(RESET)"
 		@echo "$(BONUS):$(GREEN) objects dirs are cleaned$(RESET)"
 
 fclean: clean
 		@$(RM) $(NAME)
-		@$(RM) ./$(BONUS)
+		@$(RM) checker
 		@make -C libft fclean
 
 re : fclean all

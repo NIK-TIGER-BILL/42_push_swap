@@ -1,57 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/24 20:23:56 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/24 20:23:57 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int	ft_diglen(int n)
+static int	ft_numlen(int num, int minus)
 {
-	int	counter;
+	int	i;
 
-	counter = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-		counter++;
-	while (n)
+	i = 1;
+	num /= 10;
+	while (num)
 	{
-		counter++;
-		n /= 10;
+		i++;
+		num /= 10;
 	}
-	return (counter);
+	return (i + minus);
 }
 
-static char	*ft_filler(char *itoa, int n, int diglen)
+static int	ft_abs(int n)
 {
-	itoa[diglen] = 0;
-	diglen--;
 	if (n < 0)
-	{
-		itoa[0] = '-';
-		if (n == -2147483648)
-		{
-			itoa[diglen] = 56;
-			n /= 10;
-			diglen--;
-		}
-		n = -n;
-	}
-	if (n == 0)
-		itoa[0] = 48;
-	while (n)
-	{
-		itoa[diglen] = n % 10 + 48;
-		n /= 10;
-		diglen--;
-	}
-	return (itoa);
+		return (-n);
+	return (n);
 }
 
 char	*ft_itoa(int n)
 {
-	int		diglen;
-	char	*itoa;
+	char	*p;
+	int		len;
+	int		minus;
 
-	diglen = ft_diglen(n);
-	itoa = (char *)malloc(diglen + 1);
-	if (!itoa)
+	minus = 0;
+	if (n < 0)
+		minus = 1;
+	len = ft_numlen(n, minus);
+	p = malloc((len + 1) * sizeof(char));
+	if (!p)
 		return (0);
-	itoa = ft_filler(itoa, n, diglen);
-	return (itoa);
+	p[len] = 0;
+	while (--len >= minus)
+	{
+		p[len] = (char)(ft_abs((n % 10)) + '0');
+		n /= 10;
+	}
+	if (minus)
+		p[0] = '-';
+	return (p);
 }

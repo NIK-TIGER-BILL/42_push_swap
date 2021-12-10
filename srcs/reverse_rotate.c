@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reverse_rotate.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-void	reverse_shift_A(t_stack **stack)
+void	reverse_shift_a(t_stack **stack)
 {
 	if (len_stack(*stack) > 1)
 	{
@@ -8,10 +20,10 @@ void	reverse_shift_A(t_stack **stack)
 		(*stack)->head = 0;
 		(*stack) = (*stack)->previous;
 	}
-	write(1, "rra\n", 4);  // todo hardcoding
+	write(1, "rra\n", 4);
 }
 
-void	reverse_shift_B(t_stack **stack)
+void	reverse_shift_b(t_stack **stack)
 {
 	if (len_stack(*stack) > 1)
 	{
@@ -19,7 +31,7 @@ void	reverse_shift_B(t_stack **stack)
 		(*stack)->head = 0;
 		(*stack) = (*stack)->previous;
 	}
-	write(1, "rrb\n", 4);  // todo hardcoding
+	write(1, "rrb\n", 4);
 }
 
 void	reverse_shift_both(t_stack **stack_A, t_stack **stack_B)
@@ -36,5 +48,5 @@ void	reverse_shift_both(t_stack **stack_A, t_stack **stack_B)
 		(*stack_B)->head = 0;
 		(*stack_B) = (*stack_B)->previous;
 	}
-	write(1, "rrr\n", 4);  // todo hardcoding
+	write(1, "rrr\n", 4);
 }

@@ -1,99 +1,124 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/24 20:23:50 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/24 20:23:51 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static void	ft_free(char **spliter, unsigned int i)
+static void	ft_free_memory(char **p)
 {
-	unsigned int	d;
+	char	**tmp;
 
-	d = 0;
-	while (d < i)
-	{
-		free(spliter[d]);
-		d++;
-	}
-	free(spliter);
+	tmp = p;
+	while (*p)
+		free(*p++);
+	free(tmp);
 }
 
-static unsigned int	ft_pieces(char const *s, char c)
+static void	ft_allocate_memory_for_words(char ***p, char const *s, char c)
 {
-	unsigned int	counter;
-	unsigned int	delen;
+	int	word;
 
-	delen = 0;
-	counter = 0;
-
-	while (s[counter] && s[counter] == c)
-		counter++;
-	while (s[counter])
+	word = 0;
+	while (*s)
 	{
-		counter++;
-		if (s[counter] && s[counter] == c)
+		while (*s == c && *s)
+			s++;
+		if (*s)
 		{
-			delen++;
-			while (s[counter] == c)
-				counter++;
+			while (*s != c && *s)
+				s++;
+			word++;
 		}
 	}
-	if (counter != 0 && s[counter - 1] != c)
-		delen++;
-	return (delen);
+	(*p) = malloc((word + 1) * sizeof(char *));
+	if (*p)
+		(*p)[word] = 0;
 }
 
-static unsigned int	ft_cache(const char *s, char c)
+static int	ft_allocate_memory_for_symbols(char ***p, char const *s, char c)
 {
-	unsigned int	i;
+	int	word;
+	int	symbol;
 
-	i = 0;
-	while (*s && *s == c)
-		s++;
-	while (*s && *s != c)
+	word = 0;
+	while (*s)
 	{
-		i++;
-		s++;
+		while (*s == c && *s)
+			s++;
+		if (*s)
+		{
+			symbol = 0;
+			while (*s != c && *s)
+			{
+				symbol++;
+				s++;
+			}
+			(*p)[word] = malloc((symbol + 1) * sizeof(char));
+			if (!((*p)[word]))
+				return (0);
+			word++;
+		}
 	}
-	return (i);
+	return (1);
 }
 
-static char	**ft_filler(const char **s, char **spliter, char c, unsigned int i)
+static void	ft_pull_data(char ***p, char const *s, char c)
 {
-	unsigned int	counter;
+	int	word;
+	int	symbol;
 
-	counter = 0;
-	while (**s && **s == c)
-		(*s)++;
-	while ((*s)[counter] && (*s)[counter] != c)
+	word = 0;
+	while (*s)
 	{
-		spliter[i][counter] = (*s)[counter];
-		counter++;
+		while (*s == c && *s)
+			s++;
+		if (*s)
+		{
+			symbol = 0;
+			while (*s != c && *s)
+			{
+				(*p)[word][symbol] = *s;
+				symbol++;
+				s++;
+			}
+			(*p)[word][symbol] = 0;
+			word++;
+		}
 	}
-	spliter[i][counter] = 0;
-	(*s) += counter;
-	return (spliter);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	unsigned int	delen;
-	unsigned int	i;
-	char			**spliter;
-	unsigned int	str_len;
+	char			**p;
 
-	delen = ft_pieces(s, c);
-	spliter = (char **)malloc(sizeof(char *) * (delen + 1));
-	if (!spliter)
+	if (!s)
 		return (0);
-	i = 0;
-	while (i < delen)
+	if (!(*s))
 	{
-		str_len = ft_cache(s, c);
-		spliter[i] = (char *)malloc(sizeof(char) * (str_len + 1));
-		if (!(spliter[i]))
+		p = malloc(sizeof (char *));
+		if (!p)
+			return (0);
+		*p = 0;
+		return (p);
+	}
+	ft_allocate_memory_for_words(&p, s, c);
+	if (p)
+	{
+		if (ft_allocate_memory_for_symbols(&p, s, c))
+			ft_pull_data(&p, s, c);
+		else
 		{
-			ft_free(spliter, i);
+			ft_free_memory(p);
 			return (0);
 		}
-		spliter = ft_filler(&s, spliter, c, i);
-		i++;
 	}
-	spliter[i] = 0;
-	return (spliter);
+	return (p);
 }

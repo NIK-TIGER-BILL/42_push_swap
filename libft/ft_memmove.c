@@ -1,23 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/16 15:56:20 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/16 15:56:21 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	const unsigned char	*src_m;
-	unsigned char		*dst_m;
-	unsigned char		*last_dst;
-	const unsigned char	*last_src;
+	unsigned char	*source;
+	unsigned char	*destination;
 
-	dst_m = dst;
-	src_m = src;
-	last_dst = dst_m + len - 1;
-	last_src = src_m + len - 1;
-	if (dst_m == 0 && src_m == 0)
-		return (dst);
-	if (dst_m < src_m)
+	if (dst == 0 && src == 0)
+		return (0);
+	source = (unsigned char *)src;
+	destination = (unsigned char *)dst;
+	if (destination > source)
 		while (len--)
-			*dst_m++ = *src_m++;
+			*(destination + len) = *(source + len);
 	else
 		while (len--)
-			*last_dst-- = *last_src--;
+			*destination++ = *source++;
 	return (dst);
 }

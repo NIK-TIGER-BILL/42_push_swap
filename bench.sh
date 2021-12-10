@@ -8,8 +8,8 @@ SUM=0
 
 for i in {1..1000}
 do
-		export ARG=`ruby -e "puts (1..29).to_a.shuffle.join(' ')"`
-		if ./push_swap $ARG | ./bonus $ARG | grep -q KO
+		export ARG=`ruby -e "puts (0..100).to_a.shuffle.join(' ')"`
+		if ./push_swap $ARG | ./checker $ARG | grep -q KO
 		then
 			echo "Error!"
 			echo $ARG

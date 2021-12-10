@@ -1,6 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_args.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
+
 int	check_digits(char *argv)
 {
+	if (*argv == '-')
+		argv++;
 	while (*argv)
 	{
 		if (!isdigit(*argv))
@@ -30,13 +45,9 @@ int	check_doubles(char **set)
 
 int	check_overfit(char *splitter)
 {
-	long int	check;
+	int	check;
 
-	check = ft_atoi_long(splitter);
-	if (check > 2147483647 || check < -2147483648)
-		return (0);
-	else
-		return (1);
+	return (ft_custom_atoi(&check, splitter));
 }
 
 int	checkomba(char **splitter)
@@ -46,7 +57,7 @@ int	checkomba(char **splitter)
 	i = -1;
 	while (splitter[++i])
 	{
-		if (!check_digits(splitter[i]) && !check_overfit(splitter[i]))
+		if (!check_digits(splitter[i]) || check_overfit(splitter[i]))
 		{
 			free_full_double_array(splitter);
 			my_exit(-1);
@@ -68,6 +79,8 @@ int	check_arguments(int argc, char **argv, int **cash)
 
 	i = 1;
 	arr = ft_calloc(ft_strlen(argv[i]) + 1, 1);
+	if (!arr)
+		return (-1);
 	ft_memcpy(arr, argv[i], ft_strlen(argv[i]));
 	while (++i < argc)
 	{
@@ -78,9 +91,11 @@ int	check_arguments(int argc, char **argv, int **cash)
 	free(arr);
 	i = checkomba(splitter);
 	*cash = malloc(sizeof(int *) * i);
+	if (!*cash)
+		return (-1);
 	i = -1;
 	while (splitter[++i])
-		(*cash)[i] = ft_atoi_long(splitter[i]);
+		ft_custom_atoi(&(*cash)[i], splitter[i]);
 	free_double_array(splitter, i);
 	return (i);
 }

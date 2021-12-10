@@ -1,25 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/16 15:54:35 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/16 15:54:51 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
+
+static int	ft_isspace(int c)
+{
+	if (c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r' || c == ' ')
+		return (1);
+	return (0);
+}
 
 int	ft_atoi(const char *str)
 {
-	long int	final;
-	int			minus;
+	int	multiplier;
+	int	result;
 
-	minus = 1;
-	final = 0;
-	while ((*str >= 9 && *str <= 13) || (*str == 32))
+	result = 0;
+	multiplier = 1;
+	while (ft_isspace(*str))
 		str++;
-	if (*str == 43 || *str == 45)
+	if (*str == '-' || *str == '+')
 	{
-		if (*str == 45)
-			minus = -1;
+		if (*str == '-')
+			multiplier = -1;
 		str++;
 	}
-	while (*str >= 48 && *str <= 57)
-	{
-		final *= 10;
-		final += *str - 48;
-		str++;
-	}
-	return (final * minus);
+	while (ft_isdigit(*str))
+		result = result * 10 + multiplier * (*str++ - 48);
+	return (result);
 }

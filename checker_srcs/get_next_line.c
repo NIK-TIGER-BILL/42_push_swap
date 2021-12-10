@@ -1,127 +1,127 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:35 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:38 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/get_next_line.h"
 
-void	ft_custom_lstadd_elem(t_list **lst, t_list *new)
+int	check_line_in_memory(char **p, char **memory, char **line)
 {
-	t_list	*begin;
-
-	if (!new)
-		return ;
-	if (*lst)
-	{
-		begin = *lst;
-		while ((*lst)->next)
-			*lst = (*lst)->next;
-		(*lst)->next = new;
-		*lst = begin;
-	}
-	else
-		*lst = new;
-}
-
-int	read_line(t_list *file_struct)
-{
-	char	*buf;
 	char	*tmp;
-	int		result;
+	char	*tmp2;
 
-	if (file_struct->content && ft_custom_strchr(file_struct->content, '\n'))
+	*p = ft_strchr(*memory, '\n');
+	if (!*memory)
 		return (1);
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
-		return (-1);
-	result = 1;
-	while (result)
+	tmp2 = *line;
+	if (*p)
 	{
-		result = read(file_struct->fd, buf, BUFFER_SIZE);
-		if (result <= 0)
-			break ;
-		buf[result] = 0;
-		tmp = file_struct->content;
-		file_struct->content = ft_custom_strjoin(file_struct->content, buf);
+		**p = 0;
+		*line = ft_custom_strjoin(*memory, 0);
+		tmp = *memory;
+		*memory = ft_custom_strjoin(++(*p), 0);
 		free(tmp);
-		if (ft_custom_strchr(file_struct->content, '\n'))
-			break ;
-	}
-	free(buf);
-	return (result);
-}
-
-char	*fill_line(t_list *file_struct)
-{
-	int		len;
-	char	*line;
-
-	len = 0;
-	if (!file_struct->content)
-		return (0);
-	while (file_struct->content && file_struct->content[len] != '\n')
-		len++;
-	line = (char *)malloc(len + 1);
-	if (!line)
-		return (0);
-	len = 0;
-	while (file_struct->content[len] != '\n')
-	{
-		line[len] = file_struct->content[len];
-		len++;
-	}
-	line[len] = 0;
-	return (line);
-}
-
-int	free_struct(t_list **file_struct, char **line)
-{
-	t_list	*tmp;
-	t_list	*previous;
-
-	tmp = *file_struct;
-	if ((*file_struct)->result == 0)
-	{
-		(*file_struct) = (*file_struct)->next;
-		*line = ft_custom_strdup(tmp->content);
-		free(tmp->content);
-		free(tmp);
+		if (!*memory || !*line)
+			return (0);
 	}
 	else
 	{
-		while (tmp->next && tmp->result != 0)
-		{
-			previous = tmp;
-			tmp = tmp->next;
-		}
-		previous->next = tmp->next;
-		*line = ft_custom_strdup(tmp->content);
-		free(tmp->content);
-		free(tmp);
+		*line = *memory;
+		*memory = 0;
 	}
-	return (0);
+	free(tmp2);
+	return (1);
+}
+
+int	write_data(char **storage, char *data)
+{
+	char	*tmp;
+
+	tmp = *storage;
+	*storage = ft_custom_strjoin(*storage, data);
+	if (!*storage)
+		return (0);
+	free(tmp);
+	return (1);
+}
+
+int	get_line_2(int fd, char *p, char **line, char **memory)
+{
+	char	buf[BUFFER_SIZE + 1];
+	int		count;
+
+	count = 0;
+	if (!p)
+		count = read(fd, buf, BUFFER_SIZE);
+	while (!p && count > 0)
+	{
+		buf[count] = 0;
+		p = ft_strchr(buf, '\n');
+		if (p)
+		{
+			*p = 0;
+			if (!write_data(memory, ++p))
+				return (-1);
+		}
+		if (!write_data(line, buf))
+			return (-1);
+		if (!p)
+			count = read(fd, buf, BUFFER_SIZE);
+	}
+	return (count);
+}
+
+int	get_line(int fd, char **line, char **memory)
+{
+	int		count;
+	char	*p;
+
+	*line = ft_custom_strjoin("", 0);
+	if (!(check_line_in_memory(&p, memory, line)))
+		return (-1);
+	count = get_line_2(fd, p, line, memory);
+	if (count == -1)
+	{
+		free(*line);
+		*line = 0;
+		return (-1);
+	}
+	if (!count && !*memory)
+		return (0);
+	return (1);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	static t_list	*file_struct;
+	static t_list	*list;
 	t_list			*tmp;
-	char			*del;
+	int				result;
 
-	if (!line || BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) == -1)
+	*line = 0;
+	if (read(fd, 0, 0) == -1 || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	if (!file_struct)
-		ft_custom_lstadd_elem(&file_struct, ft_custom_lst_new_elem(fd));
-	tmp = file_struct;
+	if (!list)
+		list = ft_list_new_element(fd);
+	if (!list)
+		return (-1);
+	tmp = list;
 	while (tmp && tmp->fd != fd)
+	{
+		if (!tmp->next)
+			tmp->next = ft_list_new_element(fd);
+		if (!tmp->next)
+			return (-1);
 		tmp = tmp->next;
-	if (!tmp)
-		ft_custom_lstadd_elem(&file_struct, ft_custom_lst_new_elem(fd));
-	tmp = file_struct;
-	while (tmp && tmp->fd != fd)
-		tmp = tmp->next;
-	tmp->result = read_line(tmp);
-	if (tmp->result > 0)
-		*line = fill_line(tmp);
-	if (tmp->result == 0)
-		return (free_struct(&file_struct, line));
-	del = tmp->content;
-	tmp->content = ft_custom_strdup(ft_custom_strchr(del, '\n') + 1);
-	free(del);
-	return (1);
+	}
+	result = get_line(tmp->fd, line, &tmp->memory);
+	if (result < 1)
+		ft_list_delete_element(&list, fd);
+	return (result);
 }

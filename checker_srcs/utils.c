@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-long int	ft_atoi_long(const char *str)
+int	ft_custom_atoi(int *final, const char *str)
 {
-	long int	final;
-	int			minus;
+	int				minus;
+	int				tmp;
 
 	minus = 1;
-	final = 0;
-	while ((*str >= 9 && *str <= 13) || (*str == 32))
-		str++;
+	*final = 0;
 	if (*str == 43 || *str == 45)
 	{
 		if (*str == 45)
@@ -17,11 +27,15 @@ long int	ft_atoi_long(const char *str)
 	}
 	while (*str >= 48 && *str <= 57)
 	{
-		final *= 10;
-		final += *str - 48;
+		tmp = *final;
+		*final *= 10;
+		*final += *str - 48;
+		if (tmp > *final)
+			return (1);
 		str++;
 	}
-	return (final * minus);
+	*final *= minus;
+	return (0);
 }
 
 int	my_exit(int err_num)
@@ -35,7 +49,7 @@ int	my_exit(int err_num)
 
 int	len_stack(t_stack *stack)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (!stack)
@@ -52,7 +66,7 @@ int	len_stack(t_stack *stack)
 
 int	sorted_stack(t_stack *stack)
 {
-	int last;
+	int	last;
 
 	last = stack->previous->number;
 	while (stack->number != last)
@@ -66,18 +80,10 @@ int	sorted_stack(t_stack *stack)
 
 int	ft_custom_strcmp(char *s1, char *s2)
 {
-	int	len;
-
-	if (ft_strlen(s1) > ft_strlen(s2))
-		len = ft_strlen(s1);
-	else
-		len = ft_strlen(s2);
-	while (len--)
+	while (*s1 && *s2 && (*s1 == *s2))
 	{
-		if (*s1 != *s2)
-			return (1);
 		s1++;
 		s2++;
 	}
-	return (0);
+	return (*s1 == *s2);
 }

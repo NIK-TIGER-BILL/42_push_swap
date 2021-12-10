@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-long int	ft_atoi_long(const char *str) //todo лучше переписать функцию, здесь не нужно использование long
+int	ft_custom_atoi(int *final, const char *str)
 {
-	long int	final;
-	int			minus;
+	int				minus;
+	int				tmp;
 
 	minus = 1;
-	final = 0;
-	while ((*str >= 9 && *str <= 13) || (*str == 32)) // todo лучше писать не целочисленные значения char а как '0' - '9' для читаемости
-		str++;
+	*final = 0;
 	if (*str == 43 || *str == 45)
 	{
 		if (*str == 45)
@@ -17,20 +27,25 @@ long int	ft_atoi_long(const char *str) //todo лучше переписать ф
 	}
 	while (*str >= 48 && *str <= 57)
 	{
-		final *= 10;
-		final += *str - 48;
+		tmp = *final;
+		*final *= 10;
+		*final += *str - 48;
+		if (tmp > *final)
+			return (1);
 		str++;
 	}
-	return (final * minus);
+	*final *= minus;
+	return (0);
 }
 
 int	len_stack(t_stack *stack)
 {
 	int	len;
 
+	len = 0;
 	if (!stack)
 		return (0);
-	len = 1;
+	len++;
 	stack = stack->next;
 	while (stack->head == 0)
 	{
@@ -57,13 +72,7 @@ char	*str_prolongate_fabrik(char *arr, char *add)
 	tmp = arr;
 	arr = ft_strjoin(arr, add);
 	free(tmp);
+	if (!arr)
+		my_exit(-2);
 	return (arr);
 }
-
-void	ft_putstr(char *s)
-{
-	if (s)
-		while (*s)
-			write(1, s++, 1);
-}
-

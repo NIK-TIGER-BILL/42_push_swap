@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	my_exit(int err_num)
@@ -11,25 +23,25 @@ int	my_exit(int err_num)
 
 int	*casher(char **set, int *save)
 {
-	int	index;
-	long int		tmp;
+	unsigned int	counter;
+	unsigned int	index;
+	int				tmp;
 	int				*cash;
 
-	*save = 0; // todo Проверить при иницализации равна ли нулю
-	while (set[*save])
-		*save++;
-	cash = (int *)malloc(sizeof(int *) * *save); // todo почему (int *) а нa
-	// (int)
+	counter = 0;
+	while (set[counter])
+		counter++;
+	cash = (int *)malloc(sizeof(int *) * counter);
 	if (!cash)
-		my_exit(-2);
-	index = -1; // todo почему не сделать -1, как делалось в других функциях
-	// validator.c строка 13-14 (должен быть одинаковый синтаксис)
-	while (set[++index])
+		my_exit(-1);
+	*save = counter;
+	index = 0;
+	while (set[index])
 	{
-		tmp = ft_atoi_long(set[index]); // todo логику строки 30 можно вовнутрь
-		if (tmp > 2147483647 || tmp < -2147483648) // todo не нравится
+		if (ft_custom_atoi(&tmp, set[index]))
 			my_exit(-1);
 		cash[index] = tmp;
+		index++;
 	}
 	return (cash);
 }
@@ -41,10 +53,14 @@ int	main(int argc, char **argv)
 
 	counter = 0;
 	if (argc > 1)
-		counter += check_arguments(argc, argv, &cash); //todo не правильное
-		// название функции
+		counter += check_arguments(argc, argv, &cash);
 	else
 		return (0);
-	stack_init(cash, counter); // todo не очень название функции. По названию она только инициализирует стак, а где выполняется все остальное?
+	if (counter == -1)
+	{
+		free(cash);
+		my_exit(-2);
+	}
+	stack_init(cash, counter);
 	return (0);
 }

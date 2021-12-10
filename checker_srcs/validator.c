@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_pushes.c                                     :+:      :+:    :+:   */
+/*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,22 +12,40 @@
 
 #include "../includes/push_swap.h"
 
-void	check_push_b(t_stack **stack_A, t_stack **stack_B)
+int	check_digits(char *argv)
 {
-	if (*stack_A)
+	if (*argv == '-')
+		argv++;
+	while (*argv)
 	{
-		roundlst_addfront(stack_B, lstnew((*stack_A)->number, 1, (*stack_A)
-				->order));
-		roundlst_delfirst(stack_A);
+		if (!isdigit(*argv))
+			return (0);
+		argv++;
 	}
+	return (1);
 }
 
-void	check_push_a(t_stack **stack_B, t_stack **stack_A)
+int	check_doubles(char **set)
 {
-	if (*stack_B)
+	unsigned int	counter;
+
+	while (*set)
 	{
-		roundlst_addfront(stack_A, lstnew((*stack_B)->number, 1, (*stack_B)
-				->order));
-		roundlst_delfirst(stack_B);
+		counter = 1;
+		while (set[counter])
+		{
+			if (ft_custom_strcmp(set[0], set[counter]))
+				return (0);
+			counter++;
+		}
+		set++;
 	}
+	return (1);
+}
+
+int	check_overfit(char *splitter)
+{
+	int	check;
+
+	return (ft_custom_atoi(&check, splitter));
 }

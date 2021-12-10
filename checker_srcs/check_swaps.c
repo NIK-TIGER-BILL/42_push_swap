@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_swaps.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 void	check_swap_a(t_stack **stack_a)
 {
-	int number;
-	int order;
+	int	number;
+	int	order;
 
 	if ((*stack_a) && (*stack_a)->next)
 	{
@@ -15,10 +27,11 @@ void	check_swap_a(t_stack **stack_a)
 		(*stack_a)->order = order;
 	}
 }
+
 void	check_swap_b(t_stack **stack_b)
 {
-	int number;
-	int order;
+	int	number;
+	int	order;
 
 	if ((*stack_b) && (*stack_b)->next)
 	{
@@ -33,8 +46,8 @@ void	check_swap_b(t_stack **stack_b)
 
 void	check_swap_both(t_stack **stack_a, t_stack **stack_b)
 {
-	int number;
-	int order;
+	int	number;
+	int	order;
 
 	if ((*stack_b) && (*stack_b)->next)
 	{

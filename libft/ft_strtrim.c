@@ -1,69 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/24 20:22:33 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/24 20:22:34 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int	ft_char_valid(char s1, char const *set)
+static int	ft_isset(int c, char const *set)
 {
-	int	counter;
-
-	counter = 0;
-	while (set[counter])
-	{
-		if (set[counter] == s1)
+	while (*set)
+		if (c == *set++)
 			return (1);
-		counter++;
-	}
 	return (0);
 }
 
-static size_t	ft_memcounter(char const *s1, char const *set)
+static int	ft_strlenwithoutset(char const *str, char const *set)
 {
-	size_t	counter;
-	size_t	index;
-	char	*p;
+	int	i;
 
-	p = (char *)s1;
-	counter = 0;
-	while (((*p < 32 || *p > 126) || ft_char_valid(*p, set)) && *p)
-	{
-		if (ft_char_valid(*p, set))
-			counter++;
-		p++;
-	}
-	if (*p == 0)
+	i = 0;
+	while (ft_isset(*str, set))
+		str++;
+	if (!*str)
 		return (0);
-	while (*p)
-		p++;
-	while ((*p < 32 || *p > 126) || ft_char_valid(*p, set))
-	{
-		if (ft_char_valid(*p, set))
-			counter++;
-		p--;
-	}
-	index = ft_strlen((char *)s1);
-	return (index - counter);
+	while (*str++)
+		i++;
+	while (ft_isset(*(str-- - 2), set))
+		i--;
+	return (i);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	int		counter;
-	char	*mem;
-	int		index;
+	char	*p;
+	char	*start;
+	int		len;
 
-	if (!s1 || !set)
+	if (!s1)
 		return (0);
-	index = 0;
-	counter = ft_memcounter(s1, set);
-	mem = (char *)malloc(counter + 1);
-	if (!mem)
+	len = ft_strlenwithoutset(s1, set);
+	p = malloc((len + 1) * sizeof (char));
+	if (!p)
 		return (0);
-	while (((*s1 < 32 || *s1 > 126) || ft_char_valid(*s1, set)) && *s1)
+	while (ft_isset(*s1, set))
 		s1++;
-	while (counter)
-	{
-		mem[index] = *s1;
-		index++;
-		s1++;
-		counter--;
-	}
-	mem[index] = 0;
-	return (mem);
+	start = p;
+	while (*s1 && len-- > 0)
+		*p++ = *s1++;
+	*p = 0;
+	return (start);
 }

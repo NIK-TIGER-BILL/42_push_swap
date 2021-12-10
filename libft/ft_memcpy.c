@@ -1,20 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/16 15:56:13 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/04/16 15:56:14 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	unsigned int	counter;
-	unsigned char	*dst_cpy;
-	unsigned char	*src_cpy;
+	unsigned char	*source;
+	unsigned char	*destination;
 
-	dst_cpy = dst;
-	src_cpy = src;
-	counter = 0;
-	if (dst_cpy == 0 && src_cpy == 0)
-		return (dst);
+	if (dst == 0 && src == 0)
+		return (0);
+	source = (unsigned char *)src;
+	destination = (unsigned char *)dst;
 	while (n-- > 0)
-	{
-		dst_cpy[counter] = src_cpy[counter];
-		counter++;
-	}
+		*destination++ = *source++;
 	return (dst);
 }

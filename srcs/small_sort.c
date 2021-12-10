@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   small_sort.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	find_next_min(t_stack *stack, int min)
@@ -27,12 +39,12 @@ void	find_way(t_stack **stack_A, t_stack **stack_B, int min)
 	if (find_next_min(*stack_A, min))
 	{
 		while ((*stack_A)->order != min)
-			shift_A(stack_A);
+			shift_a(stack_A);
 	}
 	else
 	{
 		while ((*stack_A)->order != min)
-			reverse_shift_A(stack_A);
+			reverse_shift_a(stack_A);
 	}
 	push_b(stack_A, stack_B);
 }

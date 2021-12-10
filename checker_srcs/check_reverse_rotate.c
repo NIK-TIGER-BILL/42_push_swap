@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_reverse_rotate.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-void	check_reverse_shift_A(t_stack **stack)
+void	check_reverse_shift_a(t_stack **stack)
 {
 	if (len_stack(*stack) > 1)
 	{
@@ -10,7 +22,7 @@ void	check_reverse_shift_A(t_stack **stack)
 	}
 }
 
-void	check_reverse_shift_B(t_stack **stack)
+void	check_reverse_shift_b(t_stack **stack)
 {
 	if (len_stack(*stack) > 1)
 	{

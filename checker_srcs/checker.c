@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checker.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 t_stack	*stack_bild(int *cash, int counter)
 {
-	t_stack		*stack_A;
+	t_stack		*stack_a;
 
-	stack_A = stack_constructor(cash, counter);
+	stack_a = stack_constructor(cash, counter);
 	free(cash);
-	return (stack_A);
+	return (stack_a);
 }
 
 void	func_switcher(t_stack **stack_A, t_stack **stack_B, int counter)
@@ -18,15 +30,15 @@ void	func_switcher(t_stack **stack_A, t_stack **stack_B, int counter)
 	if (counter == 2)
 		check_swap_b(stack_B);
 	if (counter == 3)
-		check_shift_A(stack_A);
+		check_shift_a(stack_A);
 	if (counter == 4)
-		check_shift_B(stack_B);
+		check_shift_b(stack_B);
 	if (counter == 5)
 		check_shift_both(stack_A, stack_B);
 	if (counter == 6)
-		check_reverse_shift_B(stack_B);
+		check_reverse_shift_b(stack_B);
 	if (counter == 7)
-		check_reverse_shift_A(stack_A);
+		check_reverse_shift_a(stack_A);
 	if (counter == 8)
 		check_reverse_shift_both(stack_A, stack_B);
 	if (counter == 9)
@@ -37,12 +49,23 @@ void	func_switcher(t_stack **stack_A, t_stack **stack_B, int counter)
 
 void	implement_moves(t_stack **stack_A, t_stack **stack_B, char *moves)
 {
-	char	*mv[] = {"sa", "ss", "sb", "ra", "rb", "rr", "rrb", "rra", "rrr",
-			   "pa", "pb", 0};
+	char	*mv[12];
 	int		counter;
 
+	mv[0] = "sa";
+	mv[1] = "ss";
+	mv[2] = "sb";
+	mv[3] = "ra";
+	mv[4] = "rb";
+	mv[5] = "rr";
+	mv[6] = "rrb";
+	mv[7] = "rra";
+	mv[8] = "rrr";
+	mv[9] = "pa";
+	mv[10] = "pb";
+	mv[11] = 0;
 	counter = 0;
-	while (mv[counter] && ft_custom_strcmp(moves, mv[counter]))
+	while (mv[counter] && !ft_custom_strcmp(moves, mv[counter]))
 		counter++;
 	if (counter == 11)
 		my_exit(-1);
@@ -53,27 +76,27 @@ void	implement_moves(t_stack **stack_A, t_stack **stack_B, char *moves)
 int	checker(int *casher, int counter)
 {
 	char	*moves;
-	t_stack	*stack_A;
-	t_stack	*stack_B;
+	t_stack	*stack_a;
+	t_stack	*stack_b;
 
-	stack_A = stack_bild(casher, counter);
-	if (!stack_A)
+	stack_a = stack_bild(casher, counter);
+	if (!stack_a)
 		return (0);
-	stack_B = 0;
+	stack_b = 0;
 	while (get_next_line(0, &moves))
 	{
-		implement_moves(&stack_A, &stack_B, moves);
+		implement_moves(&stack_a, &stack_b, moves);
 		free(moves);
 	}
 	free(moves);
-	if (sorted_stack(stack_A) && !stack_B)
+	if (sorted_stack(stack_a))
 		write(1, "OK\n", 3);
 	else
 		write(1, "KO\n", 3);
-	if (stack_A)
-		free(stack_A);
-	if (stack_B)
-		free(stack_B);
+	if (stack_a)
+		free_stack(&stack_a);
+	if (stack_b)
+		free_stack(&stack_b);
 	return (1);
 }
 
@@ -87,6 +110,11 @@ int	main(int argc, char **argv)
 		counter += check_arguments(argc, argv, &cash);
 	else
 		return (0);
+	if (counter == -1)
+	{
+		free(cash);
+		my_exit(-2);
+	}
 	if (!checker(cash, counter))
 		my_exit(-2);
 	return (0);

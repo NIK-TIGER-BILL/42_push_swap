@@ -1,84 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/get_next_line.h"
 
-char	*ft_custom_strchr(char *s, int c)
+t_list	*ft_list_new_element(int fd)
 {
-	char	*s2;
+	t_list	*list;
 
-	s2 = (char *)s;
-	while (*s2)
+	list = malloc(sizeof(t_list));
+	if (!list)
+		return (0);
+	list->memory = 0;
+	list->fd = fd;
+	list->next = 0;
+	return (list);
+}
+
+void	ft_list_delete_element(t_list **list, int fd)
+{
+	t_list	*prev;
+	t_list	*tmp;
+
+	prev = 0;
+	tmp = *list;
+	while (tmp && tmp->fd != fd)
 	{
-		if (*s2 == (char)c)
-			return (s2);
-		s2++;
+		prev = tmp;
+		tmp = tmp->next;
 	}
-	if (*s2 == (char)c)
-		return (s2);
+	if (!tmp)
+		return ;
+	if (prev)
+		prev->next = tmp->next;
+	else
+		*list = tmp->next;
+	free(tmp->memory);
+	free(tmp);
+}
+
+int	ft_strlen(const char *str)
+{
+	int	i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	while (*str++)
+		i++;
+	return (i);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	if (!s)
+		return (0);
+	while (*s)
+		if (*s++ == (unsigned char)c)
+			return ((char *)--s);
+	if ((unsigned char )c == 0)
+		return ((char *)s);
 	return (0);
 }
 
-char	*ft_custom_strjoin(char *content, char *buf)
+char	*ft_custom_strjoin(char *s1, char *s2)
 {
-	char	*joiner;
+	char	*p;
 	char	*tmp;
 
-	joiner = (char *)malloc(ft_custom_strlen(content) + ft_custom_strlen(buf) +
-			1);
-	tmp = joiner;
-	if (content)
-		while (*content)
-			*joiner++ = *content++;
-	if (buf)
-		while (*buf)
-			*joiner++ = *buf++;
-	*joiner = 0;
-	return (tmp);
-}
-
-int	ft_custom_strlen(char *str)
-{
-	int	count;
-
-	count = 0;
-	if (!str)
+	p = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof (char));
+	if (!p)
 		return (0);
-	while (str[count] != 0)
-		count++;
-	return (count);
-}
-
-char	*ft_custom_strdup(char *s1)
-{
-	char	*mem;
-	int		counter;
-
-	counter = 0;
-	if (!s1)
-	{
-		mem = malloc(1);
-		mem[0] = 0;
-		return (mem);
-	}
-	mem = (char *)malloc(ft_custom_strlen(s1) + 1);
-	if (!mem)
-		return (0);
-	while (counter <= ft_custom_strlen(s1))
-	{
-		mem[counter] = s1[counter];
-		counter++;
-	}
-	return (mem);
-}
-
-t_list	*ft_custom_lst_new_elem(int fd)
-{
-	t_list	*elem;
-
-	elem = malloc(sizeof(t_list));
-	if (!elem)
-		return (0);
-	elem->content = 0;
-	elem->fd = fd;
-	elem->next = 0;
-	elem->result = 1;
-	return (elem);
+	tmp = p;
+	if (s1)
+		while (*s1)
+			*tmp++ = *s1++;
+	if (s2)
+		while (*s2)
+			*tmp++ = *s2++;
+	*tmp = 0;
+	return (p);
 }

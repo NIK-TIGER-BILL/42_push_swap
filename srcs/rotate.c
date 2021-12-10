@@ -1,30 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rotate.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-void    shift(t_stack **stack)
+void	shift_a(t_stack **stack)
 {
-    if (len_stack(*stack) > 1) //todo затратно, нам нужно знать что больше одного элемента, но нам не нужна информация о всем кол-во элементов. len_stack занимает O(n)
-    {
-        (*stack)->next->head = 1;
-        (*stack)->head = 0;
-        (*stack) = (*stack)->next;
-    }
+	if (len_stack(*stack) > 1)
+	{
+		(*stack)->next->head = 1;
+		(*stack)->head = 0;
+		(*stack) = (*stack)->next;
+	}
+	write(1, "ra\n", 3);
 }
 
-void	shift_A(t_stack **stack)
+void	shift_b(t_stack **stack)
 {
-    shift(stack);
-	write(1, "ra\n", 3); //todo hardcoding
+	if (len_stack(*stack) > 1)
+	{
+		(*stack)->next->head = 1;
+		(*stack)->head = 0;
+		(*stack) = (*stack)->next;
+	}
+	write(1, "rb\n", 3);
 }
 
-void	shift_B(t_stack **stack)
+void	shift_both(t_stack **stack_A, t_stack **stack_B)
 {
-    shift(stack);
-	write(1, "rb\n", 3); //todo hardcoding
-}
-
-void	shift_both(t_stack **stack_A, t_stack **stack_B) // todo объеденить функциаонал 3 (3 строка, 14 строка, 25 строка) функций в 1. Метод DRY не повторяйся!
-{
-    shift(stack_A);
-    shift(stack_B);
-	write(1, "rr\n", 3); //todo hardcoding
+	if (len_stack(*stack_A) > 1)
+	{
+		(*stack_A)->next->head = 1;
+		(*stack_A)->head = 0;
+		(*stack_A) = (*stack_A)->next;
+	}
+	if (len_stack(*stack_B) > 1)
+	{
+		(*stack_B)->next->head = 1;
+		(*stack_B)->head = 0;
+		(*stack_B) = (*stack_B)->next;
+	}
+	write(1, "rr\n", 3);
 }

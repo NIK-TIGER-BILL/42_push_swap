@@ -1,17 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebalsami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/22 16:58:43 by ebalsami          #+#    #+#             */
+/*   Updated: 2021/05/22 16:58:45 by ebalsami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 t_stack	*stack_constructor(int *cash, int counter)
 {
 	int				index;
-	t_stack			*stack_A;
+	t_stack			*stack_a;
 
 	index = 0;
-	stack_A = lstnew(cash[index], 1, 0);
-	if (!stack_A)
+	stack_a = lstnew(cash[index], 1, 0);
+	if (!stack_a)
 		return (0);
 	while (++index < counter)
-		roundlst_addback(&stack_A, lstnew(cash[index], 0, 0));
-	return (stack_A);
+		roundlst_addback(&stack_a, lstnew(cash[index], 0, 0));
+	return (stack_a);
 }
 
 void	pre_sorting(t_stack **stack_A, int *cash, int counter)
@@ -51,27 +63,27 @@ void	little_sort(t_stack **stack_A, t_stack **stack_B)
 
 void	stack_init(int *cash, int counter)
 {
-	t_stack		*stack_A;
-	t_stack		*stack_B;
+	t_stack		*stack_a;
+	t_stack		*stack_b;
 
-	stack_B = 0;
-	stack_A = stack_constructor(cash, counter);
-	if (!stack_A)
+	stack_b = 0;
+	stack_a = stack_constructor(cash, counter);
+	if (!stack_a)
 	{
 		free(cash);
 		my_exit(-2);
 	}
-	if (!sorted_stack(stack_A))
+	if (!sorted_stack(stack_a))
 	{
-		pre_sorting(&stack_A, cash, counter);
+		pre_sorting(&stack_a, cash, counter);
 		free(cash);
-		if (len_stack(stack_A) <= 31)
-			little_sort(&stack_A, &stack_B);
+		if (len_stack(stack_a) <= 31)
+			little_sort(&stack_a, &stack_b);
 		else
-			sort(&stack_A, &stack_B);
+			sort(&stack_a, &stack_b);
 	}
-	if (stack_A)
-		free_stack(&stack_A);
-	if (stack_B)
-		free_stack(&stack_B);
+	if (stack_a)
+		free_stack(&stack_a);
+	if (stack_b)
+		free_stack(&stack_b);
 }
